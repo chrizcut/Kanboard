@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPenToSquare,faTrashCan, faSquare, faSquareCheck, faSquareMinus } from '@fortawesome/free-regular-svg-icons'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
 
@@ -21,6 +21,12 @@ const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
         'done':"Done"
     }
 
+    useEffect(() => {
+    setNewTitle(ticket.title);
+    setNewType(ticket.type);
+    setNewDependencies(ticket.dependencies);
+    }, [ticket]);
+
     const handleSubmit = (e) => {
         e.preventDefault();
         // console.log(newTitle,newType,newDependencies)
@@ -31,7 +37,7 @@ const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
     };
 
     const handleAddDependency = (dependentTicket) => {
-        // console.log(newDependencies)
+        // console.log(newTitle,newType,newDependencies)
         if (newType==="done" && dependentTicket.type!=="done") {
             window.alert(`${dependentTicket.title} cannot be added as a dependency as ${newTitle} is marked as "done" and ${dependentTicket.title} is not.`)
         } else {

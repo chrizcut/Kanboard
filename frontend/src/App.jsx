@@ -18,7 +18,7 @@ const App = () => {
     })
   },[])
 
-    
+  // console.log(tickets)
 
 
   const addTicket = (newTitle, newType, newDependencies) => {
@@ -37,18 +37,19 @@ const App = () => {
   }
 
   const deleteTicket = (id) => {
-    const titleTicket = tickets.filter(ticket => ticket.id===id)[0].title
-    if (window.confirm(`Delete ${titleTicket}?`)) {
+    const ticketToDelete = tickets.filter(ticket => ticket.id===id)[0]
+
+    if (window.confirm(`Delete ${ticketToDelete.title}?`)) {
       ticketService
         .remove(id)
         .then(() => {
           const newTickets = tickets.filter(ticket=>ticket.id!==id)
 
           const updatePromises = newTickets.map(ticket => {
-            if (ticket.dependencies.includes(titleTicket)) {
+            if (ticket.dependencies.includes(ticketToDelete.id)) {
               const updatedTicket = {
                 ...ticket,
-                dependencies: ticket.dependencies.filter(dep => dep !== titleTicket),
+                dependencies: ticket.dependencies.filter(dep => dep !== ticketToDelete.id),
               };
               return ticketService.update(ticket.id, updatedTicket);
             }
@@ -56,6 +57,7 @@ const App = () => {
           });
 
           Promise.all(updatePromises).then((updatedTickets) => {
+            // console.log(updatedTickets)
             setTickets(updatedTickets);
           });
         })

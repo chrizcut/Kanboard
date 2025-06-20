@@ -44,14 +44,6 @@ const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
     }
   };
 
-  // const handleAddDependency = (dependentTicket) => {
-  //     if (newDependencies.includes(dependentTicket.title)) {
-  //         setNewDependencies(newDependencies.filter(dep => dep !== dependentTicket.title));
-  //     } else {
-  //         setNewDependencies([...newDependencies, dependentTicket.title]);
-  //     }
-  // };
-
   const handleAddDependency = (dependentTicket) => {
     // console.log(dependentTicket)
       if (type==="done" && dependentTicket.type!=="done") {
