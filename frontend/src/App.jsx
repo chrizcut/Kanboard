@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import ticketService from './services/tickets'
 import './index.css'
 import Column from './components/Column';
-// import ticket from '../../backend/models/ticket';
 
 
 
@@ -24,10 +23,6 @@ const App = () => {
 
   const addTicket = (newTitle, newType, newDependencies) => {
 
-    // const listTitles = tickets.map(ticket => ticket.title)
-    // if (listTitles.includes(newTitle)) {
-    //   window.alert(`${newTitle} already exists.`)
-    // } else {
       const newTicket = {
         title: newTitle,
         type: newType,
@@ -39,7 +34,6 @@ const App = () => {
         .then(returnedTicket => {
           setTickets(tickets.concat(returnedTicket))
         })
-    // }
   }
 
   const deleteTicket = (id) => {
