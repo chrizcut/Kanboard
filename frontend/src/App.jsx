@@ -3,9 +3,6 @@ import ticketService from './services/tickets'
 import './index.css'
 import Column from './components/Column';
 
-
-
-
 const App = () => {
 
   const [tickets, setTickets] = useState([])

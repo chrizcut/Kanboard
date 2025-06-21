@@ -4,6 +4,14 @@ import { useState, useEffect } from 'react';
 
 const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
 
+    const sortByTitle = (a, b) => {
+        const titleA = a.title.toUpperCase(); 
+        const titleB = b.title.toUpperCase();
+        if (titleA < titleB) return -1;
+        if (titleA > titleB) return 1;
+        return 0;
+    }
+
     const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState(ticket.title);
     const [newType, setNewType] = useState(ticket.type);
@@ -89,26 +97,22 @@ const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
                     <p>
                         Tasks that need to be completed first:
                         <div className="border-2 p-2 border-black rounded overflow-auto h-30">
-                            {tickets.toSorted((a, b) => {
-                                const titleA = a.title.toUpperCase(); 
-                                const titleB = b.title.toUpperCase();
-                                if (titleA < titleB) return -1
-                                if (titleA > titleB) return 1
-                                return 0
-                                }).filter(t=>t.id!==ticket.id).map(dependentTicket=>
-                                <div>
-                                    <input 
-                                        type="checkbox" 
-                                        id={`${ticket.id}-dependencies-${dependentTicket.id}`} 
-                                        name={`${ticket.id}-dependencies`} 
-                                        value={dependentTicket.title} 
-                                        onChange={()=>handleAddDependency(dependentTicket)} 
-                                        checked={newDependencies.includes(dependentTicket.id)}
-                                    />
-                                    <label htmlFor={`${ticket.id}-dependencies-${dependentTicket.id}`}>
-                                        {dependentTicket.title}
-                                    </label>
-                                </div>
+                            {tickets.toSorted(sortByTitle)
+                                .filter(t => t.id!==ticket.id)
+                                .map(dependentTicket =>
+                                    <div>
+                                        <input 
+                                            type="checkbox" 
+                                            id={`${ticket.id}-dependencies-${dependentTicket.id}`} 
+                                            name={`${ticket.id}-dependencies`} 
+                                            value={dependentTicket.title} 
+                                            onChange={()=>handleAddDependency(dependentTicket)} 
+                                            checked={newDependencies.includes(dependentTicket.id)}
+                                        />
+                                        <label htmlFor={`${ticket.id}-dependencies-${dependentTicket.id}`}>
+                                            {dependentTicket.title}
+                                        </label>
+                                    </div>
                             )}
                         </div>
                     </p>
@@ -179,14 +183,15 @@ const Ticket = ({ticket, tickets, onEdit, onDelete}) => {
                     <p>
                         Tasks that need to be completed first:
                     </p>
-                    {ticket.dependencies.map(dependentTicketID => {
-                        const fullTicket = tickets.find(t => t.id === dependentTicketID);
-                        return (
-                            <div key={dependentTicketID} className="flex items-center gap-x-1">
-                                <FontAwesomeIcon icon={typeIcons[fullTicket.type]}/>
-                                {fullTicket.title}
-                            </div>
-                        )})
+                    {tickets
+                        .filter(t => ticket.dependencies.includes(t.id))
+                        .toSorted(sortByTitle)
+                        .map(t => (
+                            <div key={t.id} className="flex items-center gap-x-1">
+                                <FontAwesomeIcon icon={typeIcons[t.type]}/>
+                                {t.title}
+                            </div>)
+                        )
                     }
                 </div>
             </div>)}

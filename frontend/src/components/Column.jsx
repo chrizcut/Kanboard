@@ -2,12 +2,16 @@ import { useState } from 'react';
 import Ticket from './Ticket';
 
 const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
-  const filteredTickets = tickets.filter(ticket=>ticket.type===type).toSorted((a, b) => {
-    const titleA = a.title.toUpperCase(); 
-    const titleB = b.title.toUpperCase();
-    if (titleA < titleB) return -1
-    if (titleA > titleB) return 1
-    return 0})
+
+  const sortByTitle = (a, b) => {
+      const titleA = a.title.toUpperCase(); 
+      const titleB = b.title.toUpperCase();
+      if (titleA < titleB) return -1;
+      if (titleA > titleB) return 1;
+      return 0;
+  }
+
+  const filteredTickets = tickets.filter(ticket=>ticket.type===type).toSorted(sortByTitle)
 
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState('');
