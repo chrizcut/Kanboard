@@ -45,8 +45,7 @@ app.post('/api/tickets', (request, response, next) => {
   })
 
   ticket.save()
-    .then(savedTicket => response.json(savedTicket)
-    )
+    .then(savedTicket => response.json(savedTicket))
     .catch(error => next(error))
 })
 
@@ -63,9 +62,7 @@ app.put('/api/tickets/:id', (request, response, next) => {
       ticket.type = type
       ticket.dependencies = dependencies.toSorted()
 
-      return ticket.save().then((updatedTicket) => {
-        response.json(updatedTicket)
-      })
+      return ticket.save().then((updatedTicket) => response.json(updatedTicket))
     })
     .catch(error => next(error))
 })

@@ -3,17 +3,11 @@ import Ticket from './Ticket';
 
 const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
   const filteredTickets = tickets.filter(ticket=>ticket.type===type).toSorted((a, b) => {
-  const nameA = a.title.toUpperCase(); 
-  const nameB = b.title.toUpperCase();
-  if (nameA < nameB) {
-    return -1;
-  }
-  if (nameA > nameB) {
-    return 1;
-  }
-
-  // names must be equal
-  return 0})
+    const titleA = a.title.toUpperCase(); 
+    const titleB = b.title.toUpperCase();
+    if (titleA < titleB) return -1
+    if (titleA > titleB) return 1
+    return 0})
 
   const [isAdding, setIsAdding] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -46,15 +40,16 @@ const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
 
   const handleAddDependency = (dependentTicket) => {
     // console.log(dependentTicket)
-      if (type==="done" && dependentTicket.type!=="done") {
-          window.alert(`${dependentTicket.title} cannot be added as a dependency as ${newTitle} is marked as "done" and ${dependentTicket.title} is not.`)
-      } else {
-          if (newDependencies.includes(dependentTicket.id)) {
-              setNewDependencies(newDependencies.filter(dep => dep !== dependentTicket.id));
-          } else {
-              setNewDependencies([...newDependencies, dependentTicket.id]);
-          }
-      }
+    // dependencies that are not "done" cannot be added to a ticket marked as "done"
+    if (type==="done" && dependentTicket.type!=="done") {
+        window.alert(`${dependentTicket.title} cannot be added as a dependency as ${newTitle} is marked as "done" and ${dependentTicket.title} is not.`)
+    } else {
+        if (newDependencies.includes(dependentTicket.id)) {
+            setNewDependencies(newDependencies.filter(dep => dep !== dependentTicket.id));
+        } else {
+            setNewDependencies([...newDependencies, dependentTicket.id]);
+        }
+    }
   };
 
   return (
@@ -65,10 +60,11 @@ const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
 
 
       <div className="flex-1 space-y-4">
-        {filteredTickets.map(ticket => <Ticket key={ticket.id} ticket={ticket} tickets={tickets} onEdit={onEdit} onDelete={onDelete}/>)}
+        {filteredTickets.map(ticket => 
+        <Ticket key={ticket.id} ticket={ticket} tickets={tickets} onEdit={onEdit} onDelete={onDelete}/>)}
 
-        {isAdding && (
-          <form onSubmit={handleSubmit} className="bg-white p-3 rounded shadow space-y-2">
+        {isAdding && 
+          (<form onSubmit={handleSubmit} className="bg-white p-3 rounded shadow space-y-2">
             <input
               type="text"
               value={newTitle}
@@ -78,24 +74,24 @@ const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
               autoFocus
             />
             <p>
-                Tasks that need to be completed first:
-                <div className="border-2 p-2 border-black rounded overflow-auto h-30">
-                    {tickets.map(dependentTicket=>
-                        <div>
-                            <input 
-                                type="checkbox" 
-                                id={`dependencies-${dependentTicket.id}`} 
-                                name="dependencies"
-                                value={dependentTicket.title} 
-                                onChange={()=>handleAddDependency(dependentTicket)}
-                                checked={newDependencies.includes(dependentTicket.id)}
-                            />
-                            <label htmlFor={`dependencies-${dependentTicket.id}`}>
-                                {dependentTicket.title}
-                            </label>
-                        </div>
-                    )}
+              Tasks that need to be completed first:
+              <div className="border-2 p-2 border-black rounded overflow-auto h-30">
+                  {tickets.map(dependentTicket=>
+                    <div>
+                        <input 
+                            type="checkbox" 
+                            id={`dependencies-${dependentTicket.id}`} 
+                            name="dependencies"
+                            value={dependentTicket.title} 
+                            onChange={()=>handleAddDependency(dependentTicket)}
+                            checked={newDependencies.includes(dependentTicket.id)}
+                        />
+                        <label htmlFor={`dependencies-${dependentTicket.id}`}>
+                            {dependentTicket.title}
+                        </label>
                     </div>
+                  )}
+                </div>
             </p>
             <div className="flex justify-end gap-2">
               <button
@@ -110,18 +106,17 @@ const Column = ({ type, tickets, onAdd, onEdit, onDelete}) => {
                 Cancel
               </button>
             </div>
-          </form>
-        )}
+          </form>)
+        }
       </div>
 
-      {!isAdding && (
-        <button
+      {!isAdding && 
+        (<button
           onClick={() => setIsAdding(true)}
-          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-        >
+          className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
           + Add ticket
-        </button>
-      )}
+        </button>)
+      }
     </div>
   );
 };
