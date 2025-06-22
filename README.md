@@ -10,7 +10,7 @@ An application where tickets can be created, edited and deleted. Tickets can be 
 
 <img src="frontend/screenshots/Edit_ticket.png" height="300" alt="Editing a ticket">
 
-2. A ticket can not be marked as *done* if all its dependencies are not maked as *done*.
+2. A ticket can not be marked as *done* if all its dependencies are not marked as *done*.
 
 <img src="frontend/screenshots/Mark_ticket_done_dependencies_not_done.png" height="350" alt="Marking a ticket as done when its dependencies are not done">
 <img src="frontend/screenshots/Mark_ticket_done_dependencies_done.png" height="350" alt="Marking a ticket as done when its dependencies are done">
@@ -28,7 +28,7 @@ An application where tickets can be created, edited and deleted. Tickets can be 
 
 1. Create a .env file in the backend folder.
 
-2. Create a MongoDB collection and fill in the .env file with the necessary information.
+2. Fill in the .env file with the necessary information (the MongoDB URI can be obtained after a cluster is created on their website):
 
 MONGODB_URI=
 
